@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Purchase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .m-2 {
+            margin: 8px;
+        }
+        .bbtn {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        /* Popup form styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .popup button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <button class="m-2 bbtn" onclick="openPopup()">Buy Ticket</button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="popup" id="popup">
+        <h2>Entrance Rs: 1000 per person</h2>
+        <form id="ticketForm">
+            <input type="number" id="quantity" placeholder="Number of Tickets" required>
+            <input type="text" id="cnic" placeholder="CNIC Number" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="username" placeholder="User Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <button type="button" onclick="buyTicket()">Buy</button>
+        </form>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function buyTicket() {
+            // Get form values
+            const quantity = document.getElementById('quantity').value;
+            const cnic = document.getElementById('cnic').value;
+            const phone = document.getElementById('phone').value;
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+
+            // Validate input
+            if (!quantity || !cnic || !phone || !username || !email) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            // Show success notification
+            alert("Your Ticket Is Purchased Successfully");
+
+            // Persist bill details in localStorage
+            const bill = `
+                Hi User!
+                Name: ${username}
+                Email: ${email}
+                Phone #: ${phone}
+                CNIC: ${cnic}
+                Number of tickets: ${quantity}
+            `;
+            console.log(bill);
+            localStorage.setItem('ticketBill', bill);
+
+            // Close the popup
+            closePopup();
+        }
+
+        // Show bill from localStorage after refresh
+        window.onload = function () {
+            const savedBill = localStorage.getItem('ticketBill');
+            if (savedBill) {
+                console.log(savedBill);
+            }
+        };
+    </script>
+</body>
+</html>
